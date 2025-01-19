@@ -1,6 +1,7 @@
   const express = require('express')
 const todoRoutes = require('./src/routes/todo.route')
 const connectToDatabase = require('./src/database/database')
+const { authRoutes } = require('./src/routes/auth.route')
   const app = express()
 
   app.use(express.json())
@@ -10,6 +11,7 @@ const connectToDatabase = require('./src/database/database')
 
 
    app.use('/todos', todoRoutes)
+   app.use('/auth', authRoutes)
 
 
   app.listen(port, ()=>{
