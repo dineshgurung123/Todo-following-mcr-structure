@@ -1,27 +1,11 @@
 const bcrypt = require('bcrypt');
 const userModel = require('../models/auth');
  
-const isValidEmail = (email) =>{
-   
-  const emailRegex = /^[a-zA-Z0-9] + @[a-z]+ \.[a-z]{2,}$/
-    return emailRegex.test(email)
 
-}
 
 const userRegister = async (registerData) => {
     try {
-        // Check if the email already exists
-
-         if(!(isValidEmail(registerData.email))){
-
-          return {error : "Invalid email format"}
-         }
-
-        const existingEmail = await userModel.findOne({ email: registerData.email });
-        if (existingEmail) {
-            return { error: "User with the email already exists" };
-        }
-
+              
         // Hash the password
         const hashedPassword = await bcrypt.hash(registerData.password, 10);
 
@@ -39,4 +23,36 @@ const userRegister = async (registerData) => {
     }
 };
 
-module.exports = { userRegister };
+
+const userLogin = async(loginData) =>{
+
+   try {
+    
+    const user  =  await userModel.findOne({email: loginData.email})
+  
+
+    if(!user){
+        throw new error('user not found')
+    }
+  
+    console.log(loginData.password)
+    console.log(user.password)
+    const match =   await bcrypt.compare(loginData.password, user.password )  
+     console.log(match)
+
+    if (match) {
+       return user;
+   } else {
+       throw new Error('Invalid password');
+   }
+
+
+   } catch (error) {
+    throw error
+   }
+}
+
+module.exports = {
+     userRegister,
+    userLogin
+ };
