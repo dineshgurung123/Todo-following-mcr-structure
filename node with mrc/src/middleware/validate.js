@@ -12,5 +12,4 @@ if(error){
 next()
 
 }
-
 module.exports = validate
